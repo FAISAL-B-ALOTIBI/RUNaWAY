@@ -3,8 +3,7 @@ pipeline {
 	agent any
 
 	environment {
-		DOCKERHUB_CREDENTIALS_PSW = credentials('faisal-dockerhub-token')
-        DOCKERHUB_CREDENTIALS_USR = 'faisalalotibi'
+		DOCKERHUB_CREDENTIALS = credentials('faisal-dockerhub-token')
 		AWS_ACCESS_KEY_ID     = credentials('faisal-aws-secret-key-id')
   		AWS_SECRET_ACCESS_KEY = credentials('faisal-aws-secret-access-key')
 		ARTIFACT_NAME = 'Dockerrun.aws.json'
@@ -25,13 +24,13 @@ pipeline {
 
 		stage('Login') {
 			steps {
-				sh 'docker login -u=$DOCKERHUB_CREDENTIALS_USR -p=$DOCKERHUB_CREDENTIALS_PSW'
+				sh 'echo $DOCKERHUB_CREDENTIALS_PSW | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
 			}
 		}
 
 		stage('Push') {
 			steps {
-				sh 'docker push faisalalotibi/runaway:latest'
+				sh 'docker push faisalalotibi/runaway'
 			}
 		}
 
